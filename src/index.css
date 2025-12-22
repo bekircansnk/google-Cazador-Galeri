@@ -1,0 +1,1205 @@
+@import './styles/liquid-glass.css';
+
+:root {
+  /* Liquid Glass Core Variables */
+  --fg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(255, 255, 255, 0.16);
+  --glass-border-strong: rgba(255, 255, 255, 0.22);
+  --radius-lg: 22px;
+  --ring: rgba(255, 255, 255, 0.35);
+
+  /* Existing Tokens */
+  --glass-bg: rgba(20, 20, 25, 0.6);
+  /* --glass-border was duplicated/overridden above, ensuring consistency */
+  --glass-blur: 16px;
+  --glass-radius: 20px;
+  --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+
+  /* Spacing */
+  --gap-mobile: 12px;
+  --gap-desktop: 24px;
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+#root {
+  min-height: 100%;
+}
+
+/* Floating Header Component Styles */
+.floating-header {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-150%);
+  /* Hidden by default */
+  width: min(960px, calc(100% - 48px));
+  z-index: 50;
+
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+
+  border: var(--glass-border);
+  border-radius: var(--glass-radius);
+  box-shadow: var(--glass-shadow);
+
+  padding: 8px 16px;
+  height: 64px;
+  /* Fixed height for stability */
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.floating-header.active {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+/* Sections within Floating Header */
+.fh-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-self: start;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.fh-center {
+  justify-self: center;
+  display: flex;
+  align-items: center;
+}
+
+.fh-right {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Internal elements */
+.fh-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.fh-subtitle {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  padding-left: 10px;
+}
+
+/* Filter Styles */
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* Space between filter button and other elements if any */
+}
+
+/* Search Bar Container Adjustment for filter button */
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.search-input-wrapper {
+  flex: 1;
+}
+
+.filter-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(40, 40, 45, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  background: rgba(50, 50, 55, 0.6);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.filter-btn.active::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  background: #3b82f6;
+  /* Active dot color */
+  border-radius: 50%;
+  box-shadow: 0 0 4px #3b82f6;
+}
+
+/* Filter Popover */
+.filter-popover {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  width: 200px;
+
+  background: rgba(25, 25, 30, 0.85);
+  /* Slightly darker for better contrast */
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 100;
+
+  animation: popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: top right;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.filter-option {
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.15s ease;
+}
+
+.filter-option:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+/* Page Hero */
+.page-hero {
+  position: relative;
+  padding: 60px 20px 30px;
+  text-align: center;
+  min-height: 200px;
+  /* Ensure visual weight */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.page-hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.15;
+  /* Subtle background */
+  mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  z-index: -1;
+}
+
+.hero-brand {
+  margin-bottom: 24px;
+}
+
+.hero-logo {
+  display: block;
+  margin: 0 auto;
+  width: 320px;
+  /* Increased from 180px */
+  max-width: 100%;
+}
+
+.hero-title {
+  font-size: 40px;
+  /* Increased from 28px */
+  font-weight: 700;
+  margin: 0 0 4px;
+  letter-spacing: -0.03em;
+}
+
+.hero-subtitle {
+  font-size: 15px;
+  opacity: 0.7;
+  margin-bottom: 24px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* Floating Header Logic & Style Update */
+.floating-header {
+  height: 64px;
+  /* Slightly taller */
+  /* Center logo size increase */
+}
+
+.fh-center img {
+  height: 24px;
+  /* Larger logo */
+  width: auto;
+  object-fit: contain;
+}
+
+
+.filter-option.selected {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-weight: 500;
+}
+
+.filter-section-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 8px 12px 4px;
+  letter-spacing: 0.5px;
+}
+
+/* Scroll To Top Button (Keeping existing styled class) */
+.scroll-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+
+  background: rgba(35, 35, 40, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.95);
+  cursor: pointer;
+  z-index: 45;
+
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
+  pointer-events: none;
+}
+
+.scroll-to-top.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.scroll-to-top:hover {
+  background: rgba(50, 50, 55, 0.75);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+  transform: translateY(-3px) scale(1.05);
+}
+
+.scroll-to-top:active {
+  transform: translateY(0) scale(0.95);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* 
+  RESPONSIVE GRID SYSTEM 
+  Mobile first approach: 2 columns by default
+*/
+
+/* Album Grid (Home) */
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Mobile: 2 cols */
+  gap: var(--gap-mobile);
+}
+
+/* Tablet */
+@media (min-width: 641px) {
+  .album-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+/* Desktop: Restore dense layout (3 or 4 cols preferred by user "eski düzen") */
+@media (min-width: 1025px) {
+  .album-grid {
+    /* Use auto-fill to fill screen with density similar to previous design */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--gap-desktop);
+  }
+}
+
+/* Ultra Wide */
+@media (min-width: 1600px) {
+  .album-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+/* Photo Grid (Album) */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Mobile: 2 cols strict */
+  gap: 10px;
+}
+
+/* Tablet */
+@media (min-width: 641px) {
+  .photo-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+/* Desktop: STRICT 4 Columns as requested */
+@media (min-width: 1025px) {
+  .photo-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: var(--gap-desktop);
+  }
+}
+
+/* Photo Card Aspect Ratios */
+.photoMedia {
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2);
+
+  /* Mobile Aspect Ratio: 4:5 or 3:4 */
+  aspect-ratio: 4/5;
+}
+
+@media (min-width: 1025px) {
+  .photoMedia {
+    /* Desktop Aspect Ratio: 9:16 (Portrait) */
+    aspect-ratio: 9/16;
+  }
+}
+
+.photoThumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+/* Search Row Centering */
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  position: relative;
+
+  /* Center on Desktop */
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Page Hero Mobile Optimization */
+/* Page Hero Mobile Optimization & Mobile/Tablet Overrides */
+@media (max-width: 768px) {
+
+  /* 1. Global Touch Targets */
+  button,
+  a,
+  .glassButton,
+  .filter-btn {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+
+  /* 2. Floating Header -> Sticky Full Width */
+  .floating-header,
+  .floating-header.active {
+    width: 100%;
+    max-width: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 0;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transform: translateY(-100%);
+    padding: 0 16px;
+    height: 56px;
+    background: rgba(20, 20, 25, 0.85);
+    /* Legibility */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .floating-header.active {
+    transform: translateY(0);
+  }
+
+  .fh-subtitle {
+    display: none;
+  }
+
+  /* 3. Page Hero Adjustments */
+  .page-hero {
+    padding: 100px 16px 20px !important;
+    min-height: auto;
+  }
+
+  .hero-logo {
+    width: 100px !important;
+  }
+
+  .hero-title {
+    font-size: 26px !important;
+  }
+
+  .hero-actions {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .hero-subtitle {
+    display: none;
+  }
+
+  /* 4. Search & Filter Row */
+  .search-row {
+    margin: 0 0 20px 0;
+    width: 100%;
+    gap: 12px;
+    flex-direction: column;
+    /* Stacked */
+    align-items: stretch;
+  }
+
+  .search-input-wrapper {
+    flex: 1;
+    width: 100%;
+  }
+
+  .search-input-wrapper input {
+    height: 44px;
+    font-size: 16px;
+  }
+
+  .filter-btn {
+    width: 100%;
+    /* Full width button on mobile for easier reach? Or stick to right? User said "alt alta". */
+    /* "Filtre -> alt alta veya sıkıştırılmış" */
+    height: 44px;
+    border-radius: 12px;
+    margin-left: 0 !important;
+    /* Reset any desktop margin */
+  }
+
+  /* 5. Mobile Grids & Aspect Ratios */
+
+  /* --- GLOBAL: Hide Native Scrollbar --- */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  html {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
+  }
+
+  /* --- FAST SCROLLER --- */
+  .fast-scroller-track {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 24px;
+    z-index: 9999;
+    /* Max z-index */
+    touch-action: none;
+    /* Visibility Transition */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    /* Let clicks pass when hidden? logic in component to handle active state */
+  }
+
+  .fast-scroller-track.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .fast-scroller-thumb {
+    position: absolute;
+    right: 2px;
+    /* Close to edge */
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    touch-action: none;
+    cursor: grab;
+    transition: transform 0.1s;
+  }
+
+  /* ... rest of scroller logic in component mainly ... */
+
+  /* ALBUM LIST (HOME): 2 Columns */
+  .album-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px;
+    /* Slightly increased for better target */
+  }
+
+  /* --- ALBUM CARD (FOLDER) LOGIC --- */
+
+  .albumCard {
+    aspect-ratio: 4/5 !important;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* 
+     ALBUM CARD TITLE PILL 
+     - Always centered (desktop & mobile).
+     - Liquid Glass Pill style.
+     - Single line with ellipsis.
+  */
+  .albumCardTitlePill {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    pointer-events: none;
+    /* Allow clicks on parent card */
+
+    /* Layout */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    /* Box Model */
+    padding: 8px 16px;
+    border-radius: 999px;
+    max-width: 85%;
+
+    /* Typography */
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    /* Liquid Glass Effect */
+    background: rgba(0, 0, 0, 0.35);
+    /* Dark translucent */
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+    /* Smooth hover transition */
+    transition: all 0.3s ease;
+  }
+
+  /* Optional: Enhance glass effect on card hover */
+  .albumCard:hover .albumCardTitlePill {
+    background: rgba(0, 0, 0, 0.5);
+    transform: translate(-50%, -50%) scale(1.03);
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+
+  /* PHOTO GRID (ALBUM PAGE): 2 Columns */
+  .photo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px;
+    /* Slightly increased */
+  }
+
+  /* List View Truncation */
+  .table-row td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+    /* Force limit on mobile */
+  }
+
+  /* Filter Menu Overflow Fix */
+  .absolute.right-0.mt-2 {
+    right: 0 !important;
+    left: auto !important;
+    max-width: 90vw;
+  }
+
+  .fast-scroller-thumb.active {
+    transform: translateY(-50%) scale(1.1) !important;
+    cursor: grabbing;
+  }
+
+  .fast-scroller-bubble {
+    width: 32px;
+    height: 32px;
+    background: rgba(20, 20, 25, 0.6);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: background 0.2s;
+  }
+
+  .fast-scroller-thumb:hover .fast-scroller-bubble,
+  .fast-scroller-thumb.active .fast-scroller-bubble {
+    background: rgba(20, 20, 25, 0.9);
+  }
+
+  /* Bounce Animation for PWA Button */
+  @keyframes bounce-slow {
+
+    0%,
+    100% {
+      transform: translate(-50%, 0);
+    }
+
+    50% {
+      transform: translate(-50%, -10px);
+    }
+  }
+
+  .animate-bounce-slow {
+    animation: bounce-slow 3s infinite;
+  }
+
+  /* Album Photo Aspect: 3:4 */
+  .photoMedia {
+    aspect-ratio: 3/4 !important;
+  }
+
+  /* Text Overlay for Photos (if labels exist) */
+  .photoMetaRow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 10%, transparent);
+    padding: 20px 8px 6px;
+    z-index: 10;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    /* Adjust flex layout */
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .photoMetaName {
+    font-size: 12px !important;
+    font-weight: 500;
+    opacity: 0.95;
+  }
+
+  .photoMetaLeft {
+    font-size: 10px !important;
+    opacity: 0.7;
+  }
+
+  /* 6. Scroll To Top */
+  .scroll-to-top {
+    width: 48px;
+    height: 48px;
+    bottom: 80px;
+    right: 16px;
+  }
+}
+
+/* Safe Hover for non-touch devices only */
+@media (hover: hover) {
+  .albumCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Restore center text for desktop if needed, or keep unified style? 
+      User specifically asked for "Mobile Look: Text on bottom". 
+      Let's apply bottom text globally or keep separate?
+      User said "Modern View: put text on bottom absolutely". 
+      I will apply this GLOBALLY for consistency if implied, but user said "Mobile Grid... Modern View...".
+      I'll apply inside media query strictly for MOBILE first as requested "In Mobile (max-width 768)".
+   */
+}
+
+/* AI CTA Button Special Style */
+/* Primary Action Button (Purple Gradient) */
+.glassButton.primary {
+  /* Vivid Background: Deep Violet/Blue gradient feel */
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.8), rgba(124, 58, 237, 0.8)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+
+  /* Exterior Glow */
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background 0.2s ease !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.glassButton.primary:hover:not(:disabled) {
+  /* Increased Glow & Lift */
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
+  transform: translateY(-2px) scale(1.02);
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.9), rgba(124, 58, 237, 0.9)) !important;
+}
+
+.glassButton.primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 0 8px rgba(99, 102, 241, 0.5) !important;
+}
+
+/* Breathing animation for active state */
+@keyframes aiGlowPulse {
+  0% {
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
+  }
+
+  50% {
+    box-shadow: 0 0 22px rgba(139, 92, 246, 0.8);
+  }
+
+  100% {
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
+  }
+}
+
+.glassButton.primary:not(:disabled) {
+  animation: aiGlowPulse 3s infinite ease-in-out;
+}
+
+.glassButton.primary:disabled {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
+  color: rgba(255, 255, 255, 0.3) !important;
+  animation: none !important;
+  transform: none !important;
+  cursor: not-allowed;
+}
+
+/* LIQUID DRAWER SYSTEM */
+.liquid-drawer {
+  background: rgba(20, 20, 25, 0.55);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border-left: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+}
+
+.liquid-drawer-header {
+  padding: 24px 24px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  /* Careful hairline */
+}
+
+.liquid-drawer-title {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: white;
+  margin: 0;
+}
+
+.liquid-close-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.liquid-close-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.liquid-drawer-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Liquid List Item */
+.liquid-list-item {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 14px;
+  padding: 10px 14px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.liquid-list-item:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.liquid-remove-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.4);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.liquid-remove-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ef4444;
+}
+
+/* Glass Inputs (Form) */
+.glass-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.glass-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 12px 14px;
+
+  color: white;
+  font-family: inherit;
+  /* No monospace */
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+
+  transition: all 0.2s ease;
+}
+
+.glass-input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.09);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
+}
+
+.glass-ghost-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.glass-ghost-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Drawer Divider */
+.liquid-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  margin: 10px 0;
+  border: none;
+}
+
+/* --- Native App Feel & Touch Feedback --- */
+
+/* Scale down on press: Applicable to cards, buttons */
+.touch-feedback {
+  transition: transform 0.1s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.touch-feedback:active {
+  transform: scale(0.96);
+}
+
+/* Also apply to existing cards/buttons if desired */
+.albumCard,
+.glassButton,
+.photoMedia,
+button:not(:disabled) {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  /* Disable tap highlight on mobile to use our own feedback */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.albumCard:active,
+.glassButton:active,
+.photoMedia:active {
+  transform: scale(0.96) !important;
+}
+
+/* Animation for Context Menu */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+@keyframes slideUpSpring {
+  0% {
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+  }
+
+  60% {
+    transform: translateY(-5px) scale(1.01);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up-spring {
+  animation: slideUpSpring 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Skeleton & Animation */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
+  background-size: 200% 100%;
+  animation: skeletonLoad 1.5s infinite linear;
+}
+
+@keyframes skeletonLoad {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* =========================================
+   LIQUID GLASS BUTTON STYLES & ANIMATIONS
+   ========================================= */
+
+/* Glass Button Base */
+.glassButton {
+  border-radius: 999px;
+  padding: 10px 12px;
+  color: var(--fg);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35), 0 1px 0 rgba(255, 255, 255, 0.1) inset;
+  cursor: pointer;
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.glassButton:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.glassButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (hover: hover) {
+  .glassButton:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--glass-border-strong);
+  }
+}
+
+.glassButton:active {
+  transform: translateY(0);
+}
+
+/* Primary Variant & Animation */
+.glassButton.primary {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.8), rgba(124, 58, 237, 0.8)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+  position: relative;
+  overflow: hidden;
+  animation: aiGlowPulse 3s infinite ease-in-out;
+}
+
+.glassButton.primary:hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
+  transform: translateY(-2px) scale(1.02);
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.9), rgba(124, 58, 237, 0.9)) !important;
+}
+
+@keyframes aiGlowPulse {
+  0% {
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
+  }
+
+  50% {
+    box-shadow: 0 0 22px rgba(139, 92, 246, 0.8);
+  }
+
+  100% {
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
+  }
+}
+
+/* Close Button */
+.liquid-close-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.liquid-close-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}

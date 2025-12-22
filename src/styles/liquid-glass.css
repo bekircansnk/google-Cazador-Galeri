@@ -1,0 +1,816 @@
+:root {
+  --bg: #06070b;
+  --fg: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.62);
+
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-bg-strong: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.16);
+  --glass-border-strong: rgba(255, 255, 255, 0.22);
+  --shadow: rgba(0, 0, 0, 0.45);
+  --glow: rgba(255, 255, 255, 0.12);
+
+  --radius-lg: 22px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+
+  --ring: rgba(255, 255, 255, 0.35);
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Helvetica,
+    Arial,
+    'Apple Color Emoji',
+    'Segoe UI Emoji';
+  color: var(--fg);
+  background: var(--bg);
+  overflow-x: hidden;
+}
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  inset: -20%;
+  z-index: -2;
+  background:
+    radial-gradient(800px 600px at 15% 20%, rgba(255, 90, 155, 0.34), transparent 60%),
+    radial-gradient(900px 700px at 85% 18%, rgba(70, 130, 255, 0.32), transparent 62%),
+    radial-gradient(800px 650px at 50% 85%, rgba(90, 255, 210, 0.24), transparent 60%),
+    radial-gradient(900px 700px at 15% 85%, rgba(240, 180, 255, 0.18), transparent 62%),
+    radial-gradient(1000px 800px at 90% 80%, rgba(255, 170, 90, 0.18), transparent 65%);
+  filter: blur(55px) saturate(125%);
+  opacity: 0.85;
+  transform: translateZ(0);
+}
+
+body::after {
+  inset: -30%;
+  z-index: -3;
+  opacity: 0.6;
+  filter: blur(90px) saturate(140%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+::selection {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.container {
+  width: min(1040px, 100%);
+  margin-inline: auto;
+  padding: 26px 16px 40px;
+}
+
+.header {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.headerBrand {
+  display: grid;
+  gap: 8px;
+  text-align: center;
+}
+
+.siteTitle {
+  margin: 0;
+  font-size: clamp(26px, 3.6vw, 40px);
+  letter-spacing: 0.18em;
+  font-weight: 800;
+  line-height: 1.02;
+}
+
+.siteSubtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.pageTitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 700;
+}
+
+.sep {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.headerActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.brand {
+  display: grid;
+  gap: 6px;
+}
+
+.brandTitle {
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.brandSubtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.pillRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow:
+    0 18px 55px var(--shadow),
+    0 1px 0 rgba(255, 255, 255, 0.08) inset;
+}
+
+.glassCard {
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.glassCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(650px 240px at 10% 0%,
+      rgba(255, 255, 255, 0.14),
+      transparent 55%);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.glassButton {
+  border-radius: 999px;
+  padding: 10px 12px;
+  color: var(--fg);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.35),
+    0 1px 0 rgba(255, 255, 255, 0.1) inset;
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease;
+}
+
+.glassButton:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.glassButton[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (hover: hover) {
+  .glassButton:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--glass-border-strong);
+  }
+}
+
+.glassButton:active {
+  transform: translateY(0);
+}
+
+.searchBar {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 18px;
+}
+
+.searchField {
+  display: grid;
+  grid-template-columns: 18px 1fr 32px;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow:
+    0 16px 45px rgba(0, 0, 0, 0.35),
+    0 1px 0 rgba(255, 255, 255, 0.1) inset;
+}
+
+.searchField:focus-within {
+  border-color: var(--glass-border-strong);
+  box-shadow:
+    0 18px 55px rgba(0, 0, 0, 0.45),
+    0 0 0 6px rgba(255, 255, 255, 0.06);
+}
+
+.searchInput {
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--fg);
+  font-size: 14px;
+}
+
+.searchIcon {
+  opacity: 0.75;
+}
+
+.clearBtn {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid transparent;
+  color: var(--fg);
+  cursor: pointer;
+  transition:
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+@media (hover: hover) {
+  .clearBtn:hover {
+    background: rgba(255, 255, 255, 0.11);
+  }
+}
+
+.clearBtn:active {
+  transform: scale(0.98);
+}
+
+.grid {
+  display: grid;
+  gap: 14px;
+}
+
+.albumsGrid {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.photosGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) {
+  .albumsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .photosGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 960px) {
+  .albumsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .photosGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.sectionTitle {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.albumCard {
+  border-radius: 26px;
+  overflow: hidden;
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.42),
+    0 1px 0 rgba(255, 255, 255, 0.08) inset;
+  cursor: pointer;
+  transform: translateZ(0);
+  transition:
+    transform 190ms ease,
+    border-color 190ms ease,
+    background 190ms ease;
+}
+
+.albumCard:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+
+.albumCardThumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(1.06) contrast(1.06);
+  transform: scale(1.02);
+}
+
+.albumCardFallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.42);
+  background:
+    radial-gradient(800px 500px at 20% 10%, rgba(255, 255, 255, 0.18), transparent 55%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+}
+
+.albumCardScrim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(900px 600px at 50% 40%, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.64)),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.58));
+  opacity: 0.9;
+}
+
+.albumCardCenter {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  text-align: center;
+}
+
+.albumCardTitle {
+  margin: 0;
+  max-width: 100%;
+}
+
+.albumCardTitleInner {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  font-size: clamp(18px, 2.2vw, 26px);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.94);
+  text-shadow: 0 12px 36px rgba(0, 0, 0, 0.7);
+}
+
+.albumCardPill {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+}
+
+@media (hover: hover) {
+  .albumCard:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+
+  .albumCard:hover .albumCardThumb {
+    transform: scale(1.05);
+  }
+}
+
+.albumCard:active {
+  transform: translateY(0);
+}
+
+.photoCard {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+  display: grid;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.35),
+    0 1px 0 rgba(255, 255, 255, 0.09) inset;
+  transition:
+    transform 190ms ease,
+    border-color 190ms ease,
+    background 190ms ease;
+}
+
+.photoMedia {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  width: 100%;
+  overflow: hidden;
+}
+
+.photoThumb {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transform: translateZ(0);
+}
+
+.photoPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.06),
+      rgba(255, 255, 255, 0.02));
+}
+
+.photoMetaRow {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 2fr) 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 10px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.photoMetaLeft {
+  font-size: 11px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.photoMetaName {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.88);
+  justify-self: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.photoMetaRight {
+  justify-self: end;
+}
+
+@media (hover: hover) {
+  .photoCard:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.24);
+  }
+}
+
+.photoOverlayRow {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.iconChip {
+  pointer-events: auto;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  color: var(--fg);
+  cursor: pointer;
+  transition: transform 180ms ease;
+}
+
+.iconChip:active {
+  transform: scale(0.98);
+}
+
+.iconChip[disabled] {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.iconChipSelected {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.lightboxBackdrop {
+  background: rgba(0, 0, 0, 0.68);
+}
+
+.lightbox {
+  width: min(1180px, 100%);
+  border-radius: 26px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: min(92vh, 1080px);
+}
+
+.lightboxTop {
+  display: grid;
+  gap: 10px;
+}
+
+.lightboxTitleRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lightboxTitle {
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.9);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lightboxCount {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.lightboxMeta {
+  font-size: 12px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lightboxActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.lightboxStage {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+}
+
+.lightboxImage {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  border-radius: 18px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+}
+
+.lightboxImageFallback {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.08),
+      rgba(255, 255, 255, 0.02));
+}
+
+.lightboxLoading {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.86);
+  background: rgba(0, 0, 0, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+}
+
+.lightboxNav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lightboxNavLeft {
+  left: 12px;
+}
+
+.lightboxNavRight {
+  right: 12px;
+}
+
+@media (max-width: 520px) {
+  .lightboxStage {
+    padding: 10px;
+  }
+}
+
+.drawer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 12px;
+  z-index: 50;
+}
+
+.drawerInner {
+  width: min(980px, 100%);
+  margin-inline: auto;
+  border-radius: 18px;
+  padding: 16px 20px;
+  display: grid;
+  gap: 10px;
+  background: rgba(18, 18, 24, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.6),
+    0 1px 0 rgba(255, 255, 255, 0.15) inset;
+}
+
+.drawerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.drawerTitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.drawerActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: grid;
+  place-items: center;
+  z-index: 80;
+  padding: 18px;
+}
+
+.modal {
+  width: min(560px, 100%);
+  border-radius: 22px;
+  padding: 16px;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.modalTitle {
+  margin: 0;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+
+.modalBody {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* Brand Footer */
+.brand-footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 16px;
+  opacity: 0.9;
+  margin-top: 40px;
+}
+
+.brand-footer img {
+  max-width: 220px;
+  width: 100%;
+  height: auto;
+}

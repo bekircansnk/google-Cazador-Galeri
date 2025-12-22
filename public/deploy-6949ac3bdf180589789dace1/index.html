@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=2" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=2" />
+  <link rel="shortcut icon" href="/favicon.ico?v=2" />
+  <meta name="description" content="Cazador Katalog - Modellere Hızlı Erişim" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <link rel="apple-touch-icon" href="/pwa-icons/icon-192.png">
+  <link rel="manifest" href="/manifest.json" />
+  <title>Cazador Katalog</title>
+  <script type="module" crossorigin src="/assets/index-5dfMiSYr.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-Di84yubi.css">
+</head>
+
+<body>
+  <div id="root"></div>
+  <script>
+    window.BUILD_ID = new Date().toISOString();
+    console.log('🚀 Current Build ID:', window.BUILD_ID);
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then((registration) => {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          }, (err) => {
+            console.log('ServiceWorker registration failed: ', err);
+          });
+      });
+    }
+  </script>
+</body>
+
+</html>
