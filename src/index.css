@@ -617,60 +617,6 @@ html {
     overflow: hidden;
   }
 
-  /* 
-     ALBUM CARD TITLE PILL 
-     - Always centered (desktop & mobile).
-     - Liquid Glass Pill style.
-     - Single line with ellipsis.
-  */
-  .albumCardTitlePill {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-    pointer-events: none;
-    /* Allow clicks on parent card */
-
-    /* Layout */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-
-    /* Box Model */
-    padding: 8px 16px;
-    border-radius: 999px;
-    max-width: 85%;
-
-    /* Typography */
-    font-size: 15px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.95);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    /* Liquid Glass Effect */
-    background: rgba(0, 0, 0, 0.35);
-    /* Dark translucent */
-    backdrop-filter: blur(12px) saturate(140%);
-    -webkit-backdrop-filter: blur(12px) saturate(140%);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-
-    /* Smooth hover transition */
-    transition: all 0.3s ease;
-  }
-
-  /* Optional: Enhance glass effect on card hover */
-  .albumCard:hover .albumCardTitlePill {
-    background: rgba(0, 0, 0, 0.5);
-    transform: translate(-50%, -50%) scale(1.03);
-    border-color: rgba(255, 255, 255, 0.25);
-  }
-
   /* PHOTO GRID (ALBUM PAGE): 2 Columns */
   .photo-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -777,6 +723,60 @@ html {
     right: 16px;
   }
 }
+
+  /*
+     ALBUM CARD TITLE PILL (GLOBAL)
+     - Always centered (desktop & mobile).
+     - Liquid Glass Pill style.
+     - Single line with ellipsis.
+  */
+  .albumCardTitlePill {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    pointer-events: none;
+    /* Allow clicks on parent card */
+
+    /* Layout */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    /* Box Model */
+    padding: 8px 16px;
+    border-radius: 999px;
+    max-width: 85%;
+
+    /* Typography */
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    /* Liquid Glass Effect */
+    background: rgba(0, 0, 0, 0.35);
+    /* Dark translucent */
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+    /* Smooth hover transition */
+    transition: all 0.3s ease;
+  }
+
+  /* Optional: Enhance glass effect on card hover */
+  .albumCard:hover .albumCardTitlePill {
+    background: rgba(0, 0, 0, 0.5);
+    transform: translate(-50%, -50%) scale(1.03);
+    border-color: rgba(255, 255, 255, 0.25);
+  }
 
 /* Safe Hover for non-touch devices only */
 @media (hover: hover) {
