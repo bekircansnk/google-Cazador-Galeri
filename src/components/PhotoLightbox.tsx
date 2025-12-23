@@ -249,6 +249,7 @@ export default function PhotoLightbox(props: {
   return (
     <div
       className="lightbox-root"
+      data-testid="lightbox-modal"
       style={{
         position: 'fixed',
         inset: 0,
@@ -261,6 +262,7 @@ export default function PhotoLightbox(props: {
     >
       {/* SLIDER AREA */}
       <div
+        data-testid="lightbox-backdrop"
         style={{
           flex: 1,
           position: 'relative',
@@ -294,6 +296,7 @@ export default function PhotoLightbox(props: {
           {/* CURRENT */}
           <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <img
+              data-testid="lightbox-image"
               src={getUrl(currentItem)}
               alt=""
               style={{
@@ -377,65 +380,72 @@ export default function PhotoLightbox(props: {
               className="glassButton"
               style={{ marginLeft: 8, padding: '10px' }}
               title="Kapat"
+              data-testid="lightbox-close"
             >
               <IconX />
             </button>
           </div>
         </div>
 
-        {/* NAVIGATION ARROWS (DESKTOP ONLY) */}
-        {isDesktop && (
-          <>
-            {prevItem && (
-              <button
-                onClick={(e) => { e.stopPropagation(); setSlidingTo(-1); setTimeout(() => onIndexChange(index - 1), 300); }}
-                className="liquid-close-btn"
-                style={{
-                  position: 'absolute',
-                  left: '24px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  width: 56,
-                  height: 56,
-                  pointerEvents: 'auto',
-                  zIndex: 10002
-                }}
-              >
-                <IconChevronLeft />
-              </button>
-            )}
-            {nextItem && (
-              <button
-                onClick={(e) => { e.stopPropagation(); setSlidingTo(1); setTimeout(() => onIndexChange(index + 1), 300); }}
-                className="liquid-close-btn"
-                style={{
-                  position: 'absolute',
-                  right: '24px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  width: 56,
-                  height: 56,
-                  pointerEvents: 'auto',
-                  zIndex: 10002
-                }}
-              >
-                <IconChevronRight />
-              </button>
-            )}
+        {/* NAVIGATION ARROWS (VISIBLE ON DESKTOP & MOBILE) */}
+        <>
+          {prevItem && (
+            <button
+              data-testid="lightbox-prev"
+              onClick={(e) => { e.stopPropagation(); setSlidingTo(-1); setTimeout(() => onIndexChange(index - 1), 300); }}
+              className="liquid-close-btn"
+              style={{
+                position: 'absolute',
+                left: '24px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: 56,
+                height: 56,
+                pointerEvents: 'auto',
+                zIndex: 10002,
+                opacity: controlsVisible ? 1 : 0,
+                transition: 'opacity 0.2s'
+              }}
+            >
+              <IconChevronLeft />
+            </button>
+          )}
+          {nextItem && (
+            <button
+              data-testid="lightbox-next"
+              onClick={(e) => { e.stopPropagation(); setSlidingTo(1); setTimeout(() => onIndexChange(index + 1), 300); }}
+              className="liquid-close-btn"
+              style={{
+                position: 'absolute',
+                right: '24px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: 56,
+                height: 56,
+                pointerEvents: 'auto',
+                zIndex: 10002,
+                opacity: controlsVisible ? 1 : 0,
+                transition: 'opacity 0.2s'
+              }}
+            >
+              <IconChevronRight />
+            </button>
+          )}
 
-            {/* CLICK ZONES: Invisible areas to navigate easily */}
-            <div
-              style={{ position: 'absolute', top: 80, bottom: 80, left: 0, width: '20%', cursor: 'w-resize', zIndex: 10001, pointerEvents: 'auto' }}
-              onClick={(e) => { e.stopPropagation(); if (prevItem) { setSlidingTo(-1); setTimeout(() => onIndexChange(index - 1), 300); } }}
-              title="Önceki"
-            />
-            <div
-              style={{ position: 'absolute', top: 80, bottom: 80, right: 0, width: '20%', cursor: 'e-resize', zIndex: 10001, pointerEvents: 'auto' }}
-              onClick={(e) => { e.stopPropagation(); if (nextItem) { setSlidingTo(1); setTimeout(() => onIndexChange(index + 1), 300); } }}
-              title="Sonraki"
-            />
-          </>
-        )}
+          {/* CLICK ZONES: Invisible areas to navigate easily */}
+          <div
+            style={{ position: 'absolute', top: 80, bottom: 80, left: 0, width: '20%', cursor: 'w-resize', zIndex: 10001, pointerEvents: 'auto' }}
+            onClick={(e) => { e.stopPropagation(); if (prevItem) { setSlidingTo(-1); setTimeout(() => onIndexChange(index - 1), 300); } }}
+            title="Önceki"
+            data-testid="lightbox-left-zone"
+          />
+          <div
+            style={{ position: 'absolute', top: 80, bottom: 80, right: 0, width: '20%', cursor: 'e-resize', zIndex: 10001, pointerEvents: 'auto' }}
+            onClick={(e) => { e.stopPropagation(); if (nextItem) { setSlidingTo(1); setTimeout(() => onIndexChange(index + 1), 300); } }}
+            title="Sonraki"
+            data-testid="lightbox-right-zone"
+          />
+        </>
 
         {/* FOOTER (BOTTOM) */}
         <div

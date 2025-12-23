@@ -63,8 +63,8 @@ const AlbumCard = memo(function AlbumCard(props: {
   // Thumb Logic
   const displayThumb = useMemo(() => {
     if (!props.coverUrl) return null
-    // Request ~500px for card quality
-    return tweakThumb(props.coverUrl, 500)
+    // Request ~300px for card quality (fast load)
+    return tweakThumb(props.coverUrl, 300)
   }, [props.coverUrl])
 
   // Mouse Handler
@@ -76,6 +76,7 @@ const AlbumCard = memo(function AlbumCard(props: {
   return (
     <div
       className="albumCard touch-feedback"
+      data-testid={`album-card-${props.album.id}`}
       role="button"
       tabIndex={0}
       onTouchStart={handleTouchStart}
@@ -108,7 +109,7 @@ const AlbumCard = memo(function AlbumCard(props: {
       <div className="albumCardOverlay" />
 
       {/* 3. Title Layer (Centered Pill) */}
-      <div className="albumCardTitlePill">
+      <div className="albumCardTitlePill" data-testid="album-title">
         {props.album.name}
       </div>
     </div>

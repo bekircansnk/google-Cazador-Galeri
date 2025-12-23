@@ -77,10 +77,9 @@ export default function PhotoCard(props: {
   const touchStart = useRef<{ x: number, y: number } | null>(null)
   const isScrolling = useRef(false)
 
-  // Determine what element to observe (fallback to new div ref)
-  const refToObserve = anchorRef.current || divRef.current
-
   useEffect(() => {
+    // Determine what element to observe inside the effect
+    const refToObserve = anchorRef.current || divRef.current
     if (!refToObserve) return
 
     const obs = new IntersectionObserver(
@@ -95,7 +94,7 @@ export default function PhotoCard(props: {
 
     obs.observe(refToObserve)
     return () => obs.disconnect()
-  }, [refToObserve])
+  }, []) // Empty dependency array as refs are stable
 
   const href = props.file.webViewLink || getDriveFilePreviewUrl(props.file.id)
 
